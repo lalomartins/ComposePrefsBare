@@ -1,23 +1,27 @@
 [![](https://jitpack.io/v/JamalMulla/ComposePrefs3.svg)](https://jitpack.io/#JamalMulla/ComposePrefs3)
 
-# ComposePrefs3
+# ComposePrefs3 Bare
 
-This is the M3 version of ComposePrefs. The M2 version can be found [here](https://github.com/JamalMulla/ComposePrefs/).
+The original code can be found [here](https://github.com/JamalMulla/ComposePrefs3/).
 
 
 ComposePrefs3 is a preferences library for Jetpack Compose which makes it easy to implement
 preferences/settings in your Compose Android app. Preferences are created and positioned using an
 intuitive and easy to use API which follows a similar design to the existing Material3 Composables.
+
 ComposePrefs3
 uses [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) to store the
-actual preference data.
+actual preference data. DataStore is definitely the way to go in the future, but it's not yet fully
+supported by Kotlin Multiplatform, so for those of us wishing to develop in non-supported platforms,
+it's not an option yet. Thus, I made this "Bare" fork, which has no DataStore dependency, and
+therefore no logic at all for initializing, validating, or saving your preferences. Of course, you
+can do all of that yourself with arguments.
 
-This repository provides a sample application in which creation and use of each preference
-composable is demonstrated. The main settings screen can be
-found [here](https://github.com/JamalMulla/ComposePrefs/blob/master/app/src/main/java/com/jamal/composeprefssample/SettingsScreen.kt)
-.
+I tried to leave the API as untouched as possible, so that when you become able to use DataStore,
+you can switch to ComposePrefs3 by just changing your imports, and passing a DataStore to the
+PrefsScreen composable.
 
-## Screenshots of this sample app
+## Screenshots of the sample app
 
 <p float="left">
     <img src="/img/1.jpg?raw=true" width="150"/>
@@ -48,17 +52,10 @@ Usage is shown below.
 
 ## Usage
 
-First create a DataStore, for example in your MainActivity.kt:
+First create a Preferences/Settings screen:
 
 ``` kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-```
-
-Next in your actual Preferences/Settings screen, you can create a PrefScreen and pass in your
-DataStore as you would any other Composable:
-
-``` kotlin
-PrefsScreen(dataStore = LocalContext.current.dataStore) {
+PrefsScreen() {
     ..
 }
 ```
@@ -216,12 +213,15 @@ In your `settings.gradle` file add the following
 maven { url "https://jitpack.io" }
 ```
 
+``` kotlin
+maven(uri("https://jitpack.io"))
+```
+
 and in your module `build.gradle` file add the dependencies
 
 ``` groovy
-implementation "com.github.JamalMulla:ComposePrefs3:<version>" // Current is 1.0.4
-implementation "androidx.datastore:datastore-preferences:1.0.0"
+implementation "com.github.lalomartins:ComposePrefsBare:<version>" // Current is 1.0.4
 ```
-
-
-
+```kotlin
+implementation("com.github.lalomartins:ComposePrefsBare:<version>") // Current is 1.0.4
+```
